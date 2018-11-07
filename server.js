@@ -1,6 +1,8 @@
 require("dotenv").config();
 const path = require("path");
+const fs = require("fs-extra");
 const express = require("express");
+const {detectScene} = require("./src/detect-scene.js");
 const {generateVideoPreview} = require("./src/generate-video-preview.js");
 
 const {VIDEO_PATH, SERVER_PORT} = process.env;
@@ -27,26 +29,31 @@ app.get("/video/:anilistID/:filename", async (req, res) => {
     res.status(400).send("Bad Request");
     return;
   }
-  let video = null;
-  try {
-    video = await generateVideoPreview(
-      path.join(VIDEO_PATH, req.params.anilistID, req.params.filename),
-      t,
-      {mute: "mute" in req.query}
-    );
-  } catch (e) {
-    console.log(e);
-    res.status(500).send("Internal Server Error");
-    return;
-  }
-  if (!video) {
+  const videoFilePath = path.join(VIDEO_PATH, req.params.anilistID, req.params.filename);
+  if (!fs.existsSync(videoFilePath)) {
     res.status(404).send("Not found");
     return;
   }
-  res.set("Content-Type", "video/mp4");
-  res.set("X-Trace-Start", video.start);
-  res.set("X-Trace-End", video.end);
-  res.send(video.data);
+  try {
+    const scene = await detectScene(videoFilePath, t);
+    if (scene === null) {
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    const video = generateVideoPreview(
+      videoFilePath,
+      scene.start,
+      scene.end,
+      {mute: "mute" in req.query}
+    );
+    res.set("Content-Type", "video/mp4");
+    res.set("X-Trace-Start", scene.start);
+    res.set("X-Trace-End", scene.end);
+    res.send(video);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 app.listen(SERVER_PORT, () => console.log(`Media server listening on port ${SERVER_PORT}`));
