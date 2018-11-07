@@ -27,11 +27,18 @@ app.get("/video/:anilistID/:filename", async (req, res) => {
     res.status(400).send("Bad Request");
     return;
   }
-  const video = await generateVideoPreview(
-    path.join(VIDEO_PATH, req.params.anilistID, req.params.filename),
-    t,
-    {mute: "mute" in req.query}
-  );
+  let video = null;
+  try {
+    video = await generateVideoPreview(
+      path.join(VIDEO_PATH, req.params.anilistID, req.params.filename),
+      t,
+      {mute: "mute" in req.query}
+    );
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Internal Server Error");
+    return;
+  }
   if (!video) {
     res.status(404).send("Not found");
     return;
