@@ -49,6 +49,7 @@ app.get("/video/:anilistID/:filename", async (req, res) => {
     res.set("Content-Type", "video/mp4");
     res.set("X-Trace-Start", scene.start);
     res.set("X-Trace-End", scene.end);
+    res.set("X-Trace-Duration", scene.duration);
     res.send(video);
   } catch (e) {
     console.log(e);
