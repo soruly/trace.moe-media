@@ -17,7 +17,7 @@ const generateVideoPreview = (filePath, start, end, option = {mute: false}) => {
       end - start,
       option.mute ? "-an" : "-y",
       "-vf",
-      "scale=640:-1",
+      "scale=640:-2",
       "-crf",
       "26",
       "-preset",
