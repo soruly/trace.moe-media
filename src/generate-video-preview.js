@@ -19,7 +19,7 @@ const generateVideoPreview = (filePath, start, end, option = {mute: false}) => {
       "-vf",
       "scale=640:-2",
       "-crf",
-      "26",
+      "23",
       "-preset",
       "faster",
       tempPath
