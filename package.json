@@ -23,6 +23,6 @@
     "fs-extra": "^7.0.1"
   },
   "devDependencies": {
-    "eslint": "^5.12.1"
+    "eslint": "5.12.1"
   }
 }
