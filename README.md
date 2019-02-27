@@ -8,6 +8,8 @@
 
 ### Media server for serving video preview for [trace.moe](https://github.com/soruly/trace.moe)
 
+Currently used by Telegram Bot [@whatanimebot](http://t.me/whatanimebot)
+
 A "video scene cutter" which naturally detect timestamp boundaries of a scene, and then trim a scene out without leaking / exposing other frames that belongs to other scenes.
 
 This is used to prevent abuse of using earlier/later parts of a preview as another search image to recursively reveal extra duration of the original video, protecting the original content.
