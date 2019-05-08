@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/soruly/trace.moe-media#readme",
   "dependencies": {
-    "canvas": "^2.4.1",
+    "canvas": "^2.5.0",
     "dotenv": "^8.0.0",
     "express": "^4.16.4",
     "fs-extra": "^7.0.1"
