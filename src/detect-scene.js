@@ -2,8 +2,8 @@ const os = require("os");
 const path = require("path");
 const child_process = require("child_process");
 const fs = require("fs-extra");
-const {createCanvas, loadImage} = require("canvas");
-const {getVideoDuration} = require("./get-video-duration.js");
+const { createCanvas, loadImage } = require("canvas");
+const { getVideoDuration } = require("./get-video-duration.js");
 
 const detectScene = async (filePath, t) => {
   if (t < 0) {
@@ -31,7 +31,10 @@ const detectScene = async (filePath, t) => {
   const width = 32;
   const height = 18;
 
-  const tempPath = path.join(os.tmpdir(), `videoPreview${process.hrtime().join("")}`);
+  const tempPath = path.join(
+    os.tmpdir(),
+    `videoPreview${process.hrtime().join("")}`
+  );
   fs.removeSync(tempPath);
   fs.ensureDirSync(tempPath);
   const stdLog = child_process.spawnSync(
@@ -49,7 +52,7 @@ const detectScene = async (filePath, t) => {
       `fps=${fps},scale=${width}:${height},showinfo`,
       `${tempPath}/%04d.jpg`
     ],
-    {encoding: "utf-8"}
+    { encoding: "utf-8" }
   ).stderr;
 
   const myRe = /pts_time:\s*((\d|\.)+?)\s*pos/g;
@@ -60,14 +63,17 @@ const detectScene = async (filePath, t) => {
   }
 
   const imageDataList = await Promise.all(
-    fs.readdirSync(tempPath)
-      .map((file) => new Promise(async (resolve) => {
-        const canvas = createCanvas(width, height);
-        const ctx = canvas.getContext("2d");
-        const image = await loadImage(path.join(tempPath, file));
-        ctx.drawImage(image, 0, 0, width, height);
-        resolve(ctx.getImageData(0, 0, width, height).data);
-      })));
+    fs.readdirSync(tempPath).map(
+      file =>
+        new Promise(async resolve => {
+          const canvas = createCanvas(width, height);
+          const ctx = canvas.getContext("2d");
+          const image = await loadImage(path.join(tempPath, file));
+          ctx.drawImage(image, 0, 0, width, height);
+          resolve(ctx.getImageData(0, 0, width, height).data);
+        })
+    )
+  );
   fs.removeSync(tempPath);
 
   const getImageDiff = (a, b) => {
@@ -79,7 +85,9 @@ const detectScene = async (filePath, t) => {
   };
 
   const frameInfo = imageDataList
-    .map((curr, index, array) => getImageDiff(curr, index ? array[index - 1] : curr))
+    .map((curr, index, array) =>
+      getImageDiff(curr, index ? array[index - 1] : curr)
+    )
     .map((curr, index) => ({
       id: index,
       diff: curr,
@@ -102,7 +110,14 @@ const detectScene = async (filePath, t) => {
     }
   }
 
-  for (let i = centerFrameID === startFrameID ? centerFrameID + (0.5 * fps) : centerFrameID; i < frameInfo.length; i++) {
+  for (
+    let i =
+      centerFrameID === startFrameID
+        ? centerFrameID + 0.5 * fps
+        : centerFrameID;
+    i < frameInfo.length;
+    i++
+  ) {
     // compare with next frame
     if (i + 1 === frameInfo.length || frameInfo[i + 1].diff > threshold) {
       endFrameID = i;
@@ -125,4 +140,4 @@ const detectScene = async (filePath, t) => {
   };
 };
 
-module.exports = {detectScene};
+module.exports = { detectScene };

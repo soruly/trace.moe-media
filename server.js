@@ -2,10 +2,10 @@ require("dotenv").config();
 const path = require("path");
 const fs = require("fs-extra");
 const express = require("express");
-const {detectScene} = require("./src/detect-scene.js");
-const {generateVideoPreview} = require("./src/generate-video-preview.js");
+const { detectScene } = require("./src/detect-scene.js");
+const { generateVideoPreview } = require("./src/generate-video-preview.js");
 
-const {VIDEO_PATH, SERVER_PORT} = process.env;
+const { VIDEO_PATH, SERVER_PORT } = process.env;
 
 const app = express();
 // route for internal testing
@@ -29,7 +29,11 @@ app.get("/video/:anilistID/:filename", async (req, res) => {
     res.status(400).send("Bad Request");
     return;
   }
-  const videoFilePath = path.join(VIDEO_PATH, req.params.anilistID, req.params.filename);
+  const videoFilePath = path.join(
+    VIDEO_PATH,
+    req.params.anilistID,
+    req.params.filename
+  );
   if (!fs.existsSync(videoFilePath)) {
     res.status(404).send("Not found");
     return;
@@ -40,12 +44,9 @@ app.get("/video/:anilistID/:filename", async (req, res) => {
       res.status(500).send("Internal Server Error");
       return;
     }
-    const video = generateVideoPreview(
-      videoFilePath,
-      scene.start,
-      scene.end,
-      {mute: "mute" in req.query}
-    );
+    const video = generateVideoPreview(videoFilePath, scene.start, scene.end, {
+      mute: "mute" in req.query
+    });
     res.set("Content-Type", "video/mp4");
     res.set("X-Trace-Start", scene.start);
     res.set("X-Trace-End", scene.end);
@@ -57,4 +58,6 @@ app.get("/video/:anilistID/:filename", async (req, res) => {
   }
 });
 
-app.listen(SERVER_PORT, () => console.log(`Media server listening on port ${SERVER_PORT}`));
+app.listen(SERVER_PORT, () =>
+  console.log(`Media server listening on port ${SERVER_PORT}`)
+);
