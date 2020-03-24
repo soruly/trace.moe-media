@@ -50,7 +50,7 @@ const detectScene = async (filePath, t) => {
       "-an",
       "-vf",
       `fps=${fps},scale=${width}:${height},showinfo`,
-      `${tempPath}/%04d.jpg`
+      `${tempPath}/%04d.jpg`,
     ],
     { encoding: "utf-8" }
   ).stderr;
@@ -64,8 +64,8 @@ const detectScene = async (filePath, t) => {
 
   const imageDataList = await Promise.all(
     fs.readdirSync(tempPath).map(
-      file =>
-        new Promise(async resolve => {
+      (file) =>
+        new Promise(async (resolve) => {
           const canvas = createCanvas(width, height);
           const ctx = canvas.getContext("2d");
           const image = await loadImage(path.join(tempPath, file));
@@ -91,7 +91,7 @@ const detectScene = async (filePath, t) => {
     .map((curr, index) => ({
       id: index,
       diff: curr,
-      timeCode: timeCodeList[index]
+      timeCode: timeCodeList[index],
     }));
 
   const threshold = 50;
@@ -136,7 +136,7 @@ const detectScene = async (filePath, t) => {
   return {
     start: sceneTrimStart,
     end: sceneTrimEnd,
-    duration: videoDuration
+    duration: videoDuration,
   };
 };
 

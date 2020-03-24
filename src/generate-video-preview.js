@@ -30,7 +30,7 @@ const generateVideoPreview = (
       "23",
       "-preset",
       "faster",
-      tempPath
+      tempPath,
     ],
     { encoding: "utf-8" }
   );

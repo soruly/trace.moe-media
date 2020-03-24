@@ -45,7 +45,7 @@ app.get("/video/:anilistID/:filename", async (req, res) => {
       return;
     }
     const video = generateVideoPreview(videoFilePath, scene.start, scene.end, {
-      mute: "mute" in req.query
+      mute: "mute" in req.query,
     });
     res.set("Content-Type", "video/mp4");
     res.set("X-Trace-Start", scene.start);
