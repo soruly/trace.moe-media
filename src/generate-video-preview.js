@@ -3,16 +3,8 @@ const path = require("path");
 const child_process = require("child_process");
 const fs = require("fs-extra");
 
-const generateVideoPreview = (
-  filePath,
-  start,
-  end,
-  option = { mute: false }
-) => {
-  const tempPath = path.join(
-    os.tmpdir(),
-    `videoPreview${process.hrtime().join("")}.mp4`
-  );
+const generateVideoPreview = (filePath, start, end, option = { mute: false }) => {
+  const tempPath = path.join(os.tmpdir(), `videoPreview${process.hrtime().join("")}.mp4`);
   child_process.spawnSync(
     "ffmpeg",
     [

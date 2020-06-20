@@ -29,11 +29,7 @@ app.get("/video/:anilistID/:filename", async (req, res) => {
     res.status(400).send("Bad Request");
     return;
   }
-  const videoFilePath = path.join(
-    VIDEO_PATH,
-    req.params.anilistID,
-    req.params.filename
-  );
+  const videoFilePath = path.join(VIDEO_PATH, req.params.anilistID, req.params.filename);
   if (!fs.existsSync(videoFilePath)) {
     res.status(404).send("Not found");
     return;
@@ -58,6 +54,4 @@ app.get("/video/:anilistID/:filename", async (req, res) => {
   }
 });
 
-app.listen(SERVER_PORT, () =>
-  console.log(`Media server listening on port ${SERVER_PORT}`)
-);
+app.listen(SERVER_PORT, () => console.log(`Media server listening on port ${SERVER_PORT}`));

@@ -31,10 +31,7 @@ const detectScene = async (filePath, t) => {
   const width = 32;
   const height = 18;
 
-  const tempPath = path.join(
-    os.tmpdir(),
-    `videoPreview${process.hrtime().join("")}`
-  );
+  const tempPath = path.join(os.tmpdir(), `videoPreview${process.hrtime().join("")}`);
   fs.removeSync(tempPath);
   fs.ensureDirSync(tempPath);
   const stdLog = child_process.spawnSync(
@@ -85,9 +82,7 @@ const detectScene = async (filePath, t) => {
   };
 
   const frameInfo = imageDataList
-    .map((curr, index, array) =>
-      getImageDiff(curr, index ? array[index - 1] : curr)
-    )
+    .map((curr, index, array) => getImageDiff(curr, index ? array[index - 1] : curr))
     .map((curr, index) => ({
       id: index,
       diff: curr,
@@ -111,10 +106,7 @@ const detectScene = async (filePath, t) => {
   }
 
   for (
-    let i =
-      centerFrameID === startFrameID
-        ? centerFrameID + 0.5 * fps
-        : centerFrameID;
+    let i = centerFrameID === startFrameID ? centerFrameID + 0.5 * fps : centerFrameID;
     i < frameInfo.length;
     i++
   ) {
