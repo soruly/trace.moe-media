@@ -30,6 +30,10 @@ app.get("/video/:anilistID/:filename", async (req, res) => {
     return;
   }
   const videoFilePath = path.join(VIDEO_PATH, req.params.anilistID, req.params.filename);
+  if (!videoFilePath.startsWith(VIDEO_PATH)) {
+    res.status(403).send("403 Forbidden");
+    return;
+  }
   if (!fs.existsSync(videoFilePath)) {
     res.status(404).send("Not found");
     return;
