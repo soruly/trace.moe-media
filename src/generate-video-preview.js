@@ -1,9 +1,9 @@
-const os = require("os");
-const path = require("path");
-const child_process = require("child_process");
-const fs = require("fs-extra");
+import os from "os";
+import path from "path";
+import child_process from "child_process";
+import fs from "fs-extra";
 
-const generateVideoPreview = (filePath, start, end, option = { mute: false }) => {
+export default (filePath, start, end, option = { mute: false }) => {
   const tempPath = path.join(os.tmpdir(), `videoPreview${process.hrtime().join("")}.mp4`);
   child_process.spawnSync(
     "ffmpeg",
@@ -30,5 +30,3 @@ const generateVideoPreview = (filePath, start, end, option = { mute: false }) =>
   fs.removeSync(tempPath);
   return videoBuffer;
 };
-
-module.exports = { generateVideoPreview };

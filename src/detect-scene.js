@@ -1,11 +1,11 @@
-const os = require("os");
-const path = require("path");
-const child_process = require("child_process");
-const fs = require("fs-extra");
-const { createCanvas, loadImage } = require("canvas");
-const { getVideoDuration } = require("./get-video-duration.js");
+import os from "os";
+import path from "path";
+import child_process from "child_process";
+import fs from "fs-extra";
+import Canvas from "canvas";
+import getVideoDuration from "./get-video-duration.js";
 
-const detectScene = async (filePath, t) => {
+export default async (filePath, t) => {
   if (t < 0) {
     return null;
   }
@@ -63,9 +63,9 @@ const detectScene = async (filePath, t) => {
     fs.readdirSync(tempPath).map(
       (file) =>
         new Promise(async (resolve) => {
-          const canvas = createCanvas(width, height);
+          const canvas = Canvas.createCanvas(width, height);
           const ctx = canvas.getContext("2d");
-          const image = await loadImage(path.join(tempPath, file));
+          const image = await Canvas.loadImage(path.join(tempPath, file));
           ctx.drawImage(image, 0, 0, width, height);
           resolve(ctx.getImageData(0, 0, width, height).data);
         })
@@ -131,5 +131,3 @@ const detectScene = async (filePath, t) => {
     duration: videoDuration,
   };
 };
-
-module.exports = { detectScene };

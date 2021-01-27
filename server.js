@@ -1,9 +1,9 @@
-require("dotenv").config();
-const path = require("path");
-const fs = require("fs-extra");
-const express = require("express");
-const { detectScene } = require("./src/detect-scene.js");
-const { generateVideoPreview } = require("./src/generate-video-preview.js");
+import "dotenv/config.js";
+import path from "path";
+import fs from "fs-extra";
+import express from "express";
+import detectScene from "./src/detect-scene.js";
+import generateVideoPreview from "./src/generate-video-preview.js";
 
 const { VIDEO_PATH, SERVER_PORT } = process.env;
 
@@ -23,6 +23,7 @@ app.get("/", (req, res) => {
   `;
   res.send(html);
 });
+
 app.get("/video/:anilistID/:filename", async (req, res) => {
   const t = parseFloat(req.query.t);
   if (isNaN(t) || t < 0) {

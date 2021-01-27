@@ -1,6 +1,6 @@
-const child_process = require("child_process");
+import child_process from "child_process";
 
-const getVideoDuration = (filePath) => {
+export default (filePath) => {
   const stdLog = child_process.spawnSync(
     "ffprobe",
     ["-i", filePath, "-show_entries", "format=duration", "-v", "quiet"],
@@ -12,4 +12,3 @@ const getVideoDuration = (filePath) => {
   }
   return parseFloat(result[1]);
 };
-module.exports = { getVideoDuration };
