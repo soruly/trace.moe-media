@@ -1,0 +1,11 @@
+{
+  "apps": [
+    {
+      "name": "trace.moe-media",
+      "script": "server.js",
+      "instances": 16,
+      "autorestart": true,
+      "exec_mode": "cluster"
+    }
+  ]
+}
