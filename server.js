@@ -6,7 +6,7 @@ import detectScene from "./src/detect-scene.js";
 import generateVideoPreview from "./src/generate-video-preview.js";
 import generateImagePreview from "./src/generate-image-preview.js";
 
-const { VIDEO_PATH, SERVER_PORT } = process.env;
+const { VIDEO_PATH, SERVER_PORT, SERVER_ADDR } = process.env;
 
 const app = express();
 // route for internal testing
@@ -99,4 +99,6 @@ app.get("/image/:anilistID/:filename", async (req, res) => {
   }
 });
 
-app.listen(SERVER_PORT, () => console.log(`Media server listening on port ${SERVER_PORT}`));
+app.listen(SERVER_PORT, SERVER_ADDR, () =>
+  console.log(`Media server listening on port ${SERVER_PORT}`)
+);
