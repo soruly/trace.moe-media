@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
 app.get("/video/:anilistID/:filename", async (req, res) => {
   const t = parseFloat(req.query.t);
   if (isNaN(t) || t < 0) {
-    res.status(400).send("Bad Request");
+    res.status(400).send("Bad Request. Invalid param: t");
     return;
   }
   const videoFilePath = path.join(VIDEO_PATH, req.params.anilistID, req.params.filename);
@@ -40,15 +40,24 @@ app.get("/video/:anilistID/:filename", async (req, res) => {
     res.status(404).send("Not found");
     return;
   }
+  const size = req.query.size || "m";
+  if (!["l", "m", "s"].includes(size)) {
+    res.status(400).send("Bad Request. Invalid param: size");
+    return;
+  }
   try {
     const scene = await detectScene(videoFilePath, t);
     if (scene === null) {
       res.status(500).send("Internal Server Error");
       return;
     }
-    const video = generateVideoPreview(videoFilePath, scene.start, scene.end, {
-      mute: "mute" in req.query,
-    });
+    const video = generateVideoPreview(
+      videoFilePath,
+      scene.start,
+      scene.end,
+      size,
+      "mute" in req.query
+    );
     res.set("Content-Type", "video/mp4");
     res.set("X-Trace-Start", scene.start);
     res.set("X-Trace-End", scene.end);
@@ -63,7 +72,7 @@ app.get("/video/:anilistID/:filename", async (req, res) => {
 app.get("/thumb/:anilistID/:filename", async (req, res) => {
   const t = parseFloat(req.query.t);
   if (isNaN(t) || t < 0) {
-    res.status(400).send("Bad Request");
+    res.status(400).send("Bad Request. Invalid param: t");
     return;
   }
   const videoFilePath = path.join(VIDEO_PATH, req.params.anilistID, req.params.filename);
@@ -75,8 +84,13 @@ app.get("/thumb/:anilistID/:filename", async (req, res) => {
     res.status(404).send("Not found");
     return;
   }
+  const size = req.query.size || "m";
+  if (!["l", "m", "s"].includes(size)) {
+    res.status(400).send("Bad Request. Invalid param: size");
+    return;
+  }
   try {
-    const thumb = generateThumbPreview(videoFilePath, t);
+    const thumb = generateThumbPreview(videoFilePath, t, size);
     res.set("Content-Type", "image/jpg");
     res.send(thumb);
   } catch (e) {

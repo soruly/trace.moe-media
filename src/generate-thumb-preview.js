@@ -1,6 +1,6 @@
 import child_process from "child_process";
 
-export default (filePath, t) => {
+export default (filePath, t, size = "m") => {
   const ffmpeg = child_process.spawnSync("ffmpeg", [
     "-hide_banner",
     "-loglevel",
@@ -12,7 +12,7 @@ export default (filePath, t) => {
     "-i",
     filePath,
     "-vf",
-    "scale=320:-2",
+    `scale=${{ l: 640, m: 320, s: 160 }[size]}:-2`,
     "-c:v",
     "mjpeg",
     "-vframes",
