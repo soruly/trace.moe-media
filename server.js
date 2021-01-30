@@ -4,6 +4,7 @@ import fs from "fs-extra";
 import express from "express";
 import detectScene from "./src/detect-scene.js";
 import generateVideoPreview from "./src/generate-video-preview.js";
+import generateThumbPreview from "./src/generate-thumb-preview.js";
 
 const { VIDEO_PATH, SERVER_PORT } = process.env;
 
@@ -53,6 +54,31 @@ app.get("/video/:anilistID/:filename", async (req, res) => {
     res.set("X-Trace-End", scene.end);
     res.set("X-Trace-Duration", scene.duration);
     res.send(video);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/thumb/:anilistID/:filename", async (req, res) => {
+  const t = parseFloat(req.query.t);
+  if (isNaN(t) || t < 0) {
+    res.status(400).send("Bad Request");
+    return;
+  }
+  const videoFilePath = path.join(VIDEO_PATH, req.params.anilistID, req.params.filename);
+  if (!videoFilePath.startsWith(VIDEO_PATH)) {
+    res.status(403).send("403 Forbidden");
+    return;
+  }
+  if (!fs.existsSync(videoFilePath)) {
+    res.status(404).send("Not found");
+    return;
+  }
+  try {
+    const thumb = generateThumbPreview(videoFilePath, t);
+    res.set("Content-Type", "image/jpg");
+    res.send(thumb);
   } catch (e) {
     console.log(e);
     res.status(500).send("Internal Server Error");
