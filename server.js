@@ -4,7 +4,7 @@ import fs from "fs-extra";
 import express from "express";
 import detectScene from "./src/detect-scene.js";
 import generateVideoPreview from "./src/generate-video-preview.js";
-import generateThumbPreview from "./src/generate-thumb-preview.js";
+import generateImagePreview from "./src/generate-image-preview.js";
 
 const { VIDEO_PATH, SERVER_PORT } = process.env;
 
@@ -69,7 +69,7 @@ app.get("/video/:anilistID/:filename", async (req, res) => {
   }
 });
 
-app.get("/thumb/:anilistID/:filename", async (req, res) => {
+app.get("/image/:anilistID/:filename", async (req, res) => {
   const t = parseFloat(req.query.t);
   if (isNaN(t) || t < 0) {
     res.status(400).send("Bad Request. Invalid param: t");
@@ -90,9 +90,9 @@ app.get("/thumb/:anilistID/:filename", async (req, res) => {
     return;
   }
   try {
-    const thumb = generateThumbPreview(videoFilePath, t, size);
+    const image = generateImagePreview(videoFilePath, t, size);
     res.set("Content-Type", "image/jpg");
-    res.send(thumb);
+    res.send(image);
   } catch (e) {
     console.log(e);
     res.status(500).send("Internal Server Error");
