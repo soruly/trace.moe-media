@@ -26,13 +26,7 @@ app.get("/", (req, res) => {
 app.use(["/video/", "/image/"], async (req, res, next) => {
   if (
     req.query.token !==
-    crypto
-      .createHash("md5")
-      .update(`${req.query.t}${TRACE_MEDIA_SALT}`)
-      .digest("base64")
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_")
-      .replace(/=/g, "")
+    crypto.createHash("sha256").update(`${req.query.t}${TRACE_MEDIA_SALT}`).digest("hex")
   ) {
     return res.sendStatus(403);
   }
