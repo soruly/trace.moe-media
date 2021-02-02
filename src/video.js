@@ -69,9 +69,10 @@ export default async (req, res) => {
       "mute" in req.query
     );
     res.set("Content-Type", "video/mp4");
-    res.set("X-Trace-Start", scene.start);
-    res.set("X-Trace-End", scene.end);
-    res.set("X-Trace-Duration", scene.duration);
+    res.set("x-video-start", scene.start);
+    res.set("x-video-end", scene.end);
+    res.set("x-video-duration", scene.duration);
+    res.set("Access-Control-Expose-Headers", "x-video-start, x-video-end, x-video-duration");
     res.send(video);
   } catch (e) {
     console.log(e);
