@@ -1,11 +1,12 @@
 import path from "path";
 import fs from "fs-extra";
 import os from "os";
+import crypto from "crypto";
 import child_process from "child_process";
 
 import detectScene from "./lib/detect-scene.js";
 
-const { VIDEO_PATH } = process.env;
+const { VIDEO_PATH, TRACE_MEDIA_SALT } = process.env;
 
 const generateVideoPreview = (filePath, start, end, size = "m", mute = false) => {
   const tempPath = path.join(os.tmpdir(), `videoPreview${process.hrtime().join("")}.mp4`);
@@ -36,6 +37,13 @@ const generateVideoPreview = (filePath, start, end, size = "m", mute = false) =>
 };
 
 export default async (req, res) => {
+  if (
+    req.query.token !==
+    crypto.createHash("sha256").update(`${req.query.t}${TRACE_MEDIA_SALT}`).digest("hex")
+  ) {
+    res.status(403).send("403 Forbidden");
+    return;
+  }
   const t = parseFloat(req.query.t);
   if (isNaN(t) || t < 0) {
     res.status(400).send("Bad Request. Invalid param: t");

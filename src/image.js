@@ -1,8 +1,9 @@
 import path from "path";
 import fs from "fs-extra";
+import crypto from "crypto";
 import child_process from "child_process";
 
-const { VIDEO_PATH } = process.env;
+const { VIDEO_PATH, TRACE_MEDIA_SALT } = process.env;
 
 const generateImagePreview = (filePath, t, size = "m") => {
   const ffmpeg = child_process.spawnSync("ffmpeg", [
@@ -32,6 +33,13 @@ const generateImagePreview = (filePath, t, size = "m") => {
 };
 
 export default async (req, res) => {
+  if (
+    req.query.token !==
+    crypto.createHash("sha256").update(`${req.query.t}${TRACE_MEDIA_SALT}`).digest("hex")
+  ) {
+    res.status(403).send("403 Forbidden");
+    return;
+  }
   const t = parseFloat(req.query.t);
   if (isNaN(t) || t < 0) {
     res.status(400).send("Bad Request. Invalid param: t");
