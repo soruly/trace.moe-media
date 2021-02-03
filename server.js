@@ -2,6 +2,8 @@ import "dotenv/config.js";
 import express from "express";
 import rateLimit from "express-rate-limit";
 import getVideo from "./src/get-video.js";
+import listVideo from "./src/list-video.js";
+import list from "./src/list.js";
 import putVideo from "./src/put-video.js";
 import deleteVideo from "./src/delete-video.js";
 import video from "./src/video.js";
@@ -28,6 +30,10 @@ app.get("/:anilistID/:filename", getVideo);
 app.put("/:anilistID/:filename", putVideo);
 
 app.delete("/:anilistID/:filename", deleteVideo);
+
+app.get("/:anilistID/", listVideo);
+
+app.get("/", list);
 
 app.listen(SERVER_PORT, SERVER_ADDR, () =>
   console.log(`Media server listening on port ${SERVER_PORT}`)
