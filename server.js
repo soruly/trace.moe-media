@@ -8,6 +8,7 @@ import putVideo from "./src/put-video.js";
 import deleteVideo from "./src/delete-video.js";
 import video from "./src/video.js";
 import image from "./src/image.js";
+import checkAdmin from "./src/check-admin.js";
 
 const { SERVER_PORT, SERVER_ADDR } = process.env;
 
@@ -25,15 +26,15 @@ app.get("/video/:anilistID/:filename", video);
 
 app.get("/image/:anilistID/:filename", image);
 
-app.get("/:anilistID/:filename", getVideo);
+app.get("/:anilistID/:filename", checkAdmin, getVideo);
 
-app.put("/:anilistID/:filename", putVideo);
+app.put("/:anilistID/:filename", checkAdmin, putVideo);
 
-app.delete("/:anilistID/:filename", deleteVideo);
+app.delete("/:anilistID/:filename", checkAdmin, deleteVideo);
 
-app.get("/:anilistID/", listVideo);
+app.get("/:anilistID/", checkAdmin, listVideo);
 
-app.get("/", list);
+app.get("/", checkAdmin, list);
 
 app.listen(SERVER_PORT, SERVER_ADDR, () =>
   console.log(`Media server listening on port ${SERVER_PORT}`)
