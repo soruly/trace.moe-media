@@ -3,7 +3,7 @@
     {
       "name": "trace.moe-media",
       "script": "server.js",
-      "instances": 16,
+      "instances": 4,
       "autorestart": true,
       "exec_mode": "cluster"
     }
