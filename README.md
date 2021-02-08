@@ -1,10 +1,8 @@
 # trace.moe-media
 
-[![Build Status](https://travis-ci.org/soruly/trace.moe-media.svg?branch=master)](https://travis-ci.org/soruly/trace.moe-media)
-[![](https://david-dm.org/soruly/trace.moe-media/status.svg)](https://david-dm.org/soruly/trace.moe-media)
-[![License](https://img.shields.io/github/license/soruly/trace.moe-media.svg)](https://github.com/soruly/trace.moe-media/blob/master/LICENSE)
-[![Discord](https://img.shields.io/discord/437578425767559188.svg)](https://discord.gg/K9jn6Kj)
-[![Donate](https://img.shields.io/badge/donate-patreon-orange.svg)](https://www.patreon.com/soruly)
+[![License](https://img.shields.io/github/license/soruly/trace.moe-media.svg?style=flat-square)](https://github.com/soruly/trace.moe-media/blob/master/LICENSE)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/soruly/trace.moe-media/Node.js%20CI?style=flat-square)](https://github.com/soruly/trace.moe-media/actions)
+[![Discord](https://img.shields.io/discord/437578425767559188.svg?style=flat-square)](https://discord.gg/K9jn6Kj)
 
 ### Media server for serving video preview for [trace.moe](https://github.com/soruly/trace.moe)
 
