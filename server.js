@@ -22,6 +22,8 @@ app.use(
   })
 );
 
+app.get("/health", (req, res) => res.send("ok"));
+
 app.get("/video/:anilistID/:filename", video);
 
 app.get("/image/:anilistID/:filename", image);
