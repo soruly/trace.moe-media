@@ -14,8 +14,27 @@ const { SERVER_PORT, SERVER_ADDR } = process.env;
 
 const app = express();
 
-app.set("trust proxy", 1);
 app.disable("x-powered-by");
+
+app.set("trust proxy", 1);
+
+app.use((req, res, next) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.set("Referrer-Policy", "no-referrer");
+  res.set(
+    "Content-Security-Policy",
+    [
+      "default-src 'none'",
+      "base-uri 'none'",
+      "frame-ancestors 'none'",
+      "form-action 'none'",
+      "block-all-mixed-content",
+    ].join("; ")
+  );
+  next();
+});
+
 app.use(
   rateLimit({
     max: 30, // 30 requests per IP address (per node.js process)
