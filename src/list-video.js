@@ -6,7 +6,7 @@ const { VIDEO_PATH } = process.env;
 export default async (req, res) => {
   const videoDirPath = path.join(VIDEO_PATH, req.path);
   if (!videoDirPath.startsWith(VIDEO_PATH)) {
-    res.status(403).send("403 Forbidden");
+    res.status(403).send("Forbidden");
     return;
   }
   if (!fs.existsSync(videoDirPath)) {

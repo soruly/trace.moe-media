@@ -37,7 +37,7 @@ export default async (req, res) => {
     req.query.token !==
     crypto.createHash("sha256").update(`${req.query.t}${TRACE_MEDIA_SALT}`).digest("hex")
   ) {
-    res.status(403).send("403 Forbidden");
+    res.status(403).send("Forbidden");
     return;
   }
   const t = parseFloat(req.query.t);
@@ -47,7 +47,7 @@ export default async (req, res) => {
   }
   const videoFilePath = path.join(VIDEO_PATH, req.params.anilistID, req.params.filename);
   if (!videoFilePath.startsWith(VIDEO_PATH)) {
-    res.status(403).send("403 Forbidden");
+    res.status(403).send("Forbidden");
     return;
   }
   if (!fs.existsSync(videoFilePath)) {

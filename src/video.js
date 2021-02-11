@@ -41,17 +41,17 @@ export default async (req, res) => {
     req.query.token !==
     crypto.createHash("sha256").update(`${req.query.t}${TRACE_MEDIA_SALT}`).digest("hex")
   ) {
-    res.status(403).send("403 Forbidden");
+    res.status(403).send("Forbidden");
     return;
   }
   const t = parseFloat(req.query.t);
   if (isNaN(t) || t < 0) {
-    res.status(400).send("Bad Request. Invalid param: t");
+    res.status(400).send("Bad Request");
     return;
   }
   const videoFilePath = path.join(VIDEO_PATH, req.params.anilistID, req.params.filename);
   if (!videoFilePath.startsWith(VIDEO_PATH)) {
-    res.status(403).send("403 Forbidden");
+    res.status(403).send("Forbidden");
     return;
   }
   if (!fs.existsSync(videoFilePath)) {
@@ -60,7 +60,7 @@ export default async (req, res) => {
   }
   const size = req.query.size || "m";
   if (!["l", "m", "s"].includes(size)) {
-    res.status(400).send("Bad Request. Invalid param: size");
+    res.status(400).send("Bad Request");
     return;
   }
   try {
