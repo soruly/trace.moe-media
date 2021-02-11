@@ -38,8 +38,9 @@ const generateVideoPreview = (filePath, start, end, size = "m", mute = false) =>
 
 export default async (req, res) => {
   if (
+    TRACE_MEDIA_SALT &&
     req.query.token !==
-    crypto.createHash("sha256").update(`${req.query.t}${TRACE_MEDIA_SALT}`).digest("hex")
+      crypto.createHash("sha256").update(`${req.query.t}${TRACE_MEDIA_SALT}`).digest("hex")
   ) {
     res.status(403).send("Forbidden");
     return;
