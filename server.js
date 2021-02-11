@@ -24,6 +24,7 @@ app.use((req, res, next) => {
     "Content-Security-Policy",
     [
       "default-src 'none'",
+      "media-src 'self'",
       "base-uri 'none'",
       "frame-ancestors 'none'",
       "form-action 'none'",
