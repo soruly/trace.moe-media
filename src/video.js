@@ -42,33 +42,27 @@ export default async (req, res) => {
     req.query.token !==
       crypto.createHash("sha256").update(`${req.query.t}${TRACE_MEDIA_SALT}`).digest("hex")
   ) {
-    res.status(403).send("Forbidden");
-    return;
+    return res.status(400).send("Bad Request");
   }
   const t = parseFloat(req.query.t);
   if (isNaN(t) || t < 0) {
-    res.status(400).send("Bad Request");
-    return;
+    return res.status(400).send("Bad Request");
   }
   const videoFilePath = path.join(VIDEO_PATH, req.params.anilistID, req.params.filename);
   if (!videoFilePath.startsWith(VIDEO_PATH)) {
-    res.status(403).send("Forbidden");
-    return;
+    return res.status(403).send("Forbidden");
   }
   if (!fs.existsSync(videoFilePath)) {
-    res.status(404).send("Not found");
-    return;
+    return res.status(404).send("Not found");
   }
   const size = req.query.size || "m";
   if (!["l", "m", "s"].includes(size)) {
-    res.status(400).send("Bad Request");
-    return;
+    return res.status(400).send("Bad Request");
   }
   try {
     const scene = await detectScene(videoFilePath, t);
     if (scene === null) {
-      res.status(500).send("Internal Server Error");
-      return;
+      return res.status(500).send("Internal Server Error");
     }
     const video = generateVideoPreview(
       videoFilePath,
