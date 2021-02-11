@@ -15,6 +15,7 @@ const { SERVER_PORT, SERVER_ADDR } = process.env;
 const app = express();
 
 app.set("trust proxy", 1);
+app.disable("x-powered-by");
 app.use(
   rateLimit({
     max: 30, // 30 requests per IP address (per node.js process)
