@@ -40,7 +40,11 @@ export default async (req, res) => {
   if (
     TRACE_MEDIA_SALT &&
     req.query.token !==
-      crypto.createHash("sha256").update(`${req.query.t}${TRACE_MEDIA_SALT}`).digest("hex")
+      crypto
+        .createHash("sha1")
+        .update([req.params.anilistID, req.params.filename, req.query.t, TRACE_MEDIA_SALT].join(""))
+        .digest("base64")
+        .replace(/[^0-9A-Za-z]/g, "")
   ) {
     return res.status(400).send("Bad Request");
   }
