@@ -5,7 +5,7 @@ import fs from "fs-extra";
 import Canvas from "canvas";
 import getVideoDuration from "./get-video-duration.js";
 
-export default async (filePath, t) => {
+export default async (filePath, t, minDuration) => {
   if (t < 0) {
     return null;
   }
@@ -94,24 +94,24 @@ export default async (filePath, t) => {
   if (centerFrameID > frameInfo.length - 1) {
     centerFrameID = frameInfo.length - 1;
   }
+  const minFrames = (minDuration / 2) * fps;
 
   let startFrameID = centerFrameID;
   let endFrameID = centerFrameID;
   for (let i = centerFrameID; i >= 0; i--) {
     // compare with prev frame
-    if (i === 0 || frameInfo[i].diff > threshold) {
+    if (i === 0 || (frameInfo[i].diff > threshold && centerFrameID - i > minFrames)) {
       startFrameID = i;
       break;
     }
   }
 
-  for (
-    let i = centerFrameID === startFrameID ? centerFrameID + 0.5 * fps : centerFrameID;
-    i < frameInfo.length;
-    i++
-  ) {
+  for (let i = centerFrameID; i < frameInfo.length; i++) {
     // compare with next frame
-    if (i + 1 === frameInfo.length || frameInfo[i + 1].diff > threshold) {
+    if (
+      i + 1 === frameInfo.length ||
+      (frameInfo[i + 1].diff > threshold && i - centerFrameID > minFrames)
+    ) {
       endFrameID = i;
       break;
     }

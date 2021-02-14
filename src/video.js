@@ -59,8 +59,9 @@ export default async (req, res) => {
   if (!["l", "m", "s"].includes(size)) {
     return res.status(400).send("Bad Request");
   }
+  const minDuration = Number(req.query.minDuration) || 0.5;
   try {
-    const scene = await detectScene(videoFilePath, t);
+    const scene = await detectScene(videoFilePath, t, minDuration > 3 ? 3 : minDuration);
     if (scene === null) {
       return res.status(500).send("Internal Server Error");
     }
