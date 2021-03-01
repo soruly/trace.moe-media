@@ -10,7 +10,7 @@ const { VIDEO_PATH, TRACE_MEDIA_SALT } = process.env;
 
 const generateVideoPreview = (filePath, start, end, size = "m", mute = false) => {
   const tempPath = path.join(os.tmpdir(), `videoPreview${process.hrtime().join("")}.mp4`);
-  child_process.spawnSync(
+  const ffmpeg = child_process.spawnSync(
     "ffmpeg",
     [
       "-y",
@@ -27,10 +27,13 @@ const generateVideoPreview = (filePath, start, end, size = "m", mute = false) =>
       "23",
       "-preset",
       "faster",
+      "-max_muxing_queue_size",
+      "1024",
       tempPath,
     ],
     { encoding: "utf-8" }
   );
+  // console.log(ffmpeg.stderr);
   const videoBuffer = fs.readFileSync(tempPath);
   fs.removeSync(tempPath);
   return videoBuffer;
