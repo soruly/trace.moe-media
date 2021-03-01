@@ -34,7 +34,7 @@ export default async (filePath, t, minDuration) => {
   const tempPath = path.join(os.tmpdir(), `videoPreview${process.hrtime().join("")}`);
   fs.removeSync(tempPath);
   fs.ensureDirSync(tempPath);
-  const stdLog = child_process.spawnSync(
+  const ffmpeg = child_process.spawnSync(
     "ffmpeg",
     [
       "-y",
@@ -46,18 +46,12 @@ export default async (filePath, t, minDuration) => {
       trimEnd - trimStart,
       "-an",
       "-vf",
-      `fps=${fps},scale=${width}:${height},showinfo`,
+      `fps=${fps},scale=${width}:${height}`,
       `${tempPath}/%04d.jpg`,
     ],
     { encoding: "utf-8" }
-  ).stderr;
-
-  const myRe = /pts_time:\s*((\d|\.)+?)\s*pos/g;
-  let temp = [];
-  const timeCodeList = [];
-  while ((temp = myRe.exec(stdLog)) !== null) {
-    timeCodeList.push(parseFloat(temp[1]));
-  }
+  );
+  // console.log(ffmpeg.stderr);
 
   const imageDataList = await Promise.all(
     fs.readdirSync(tempPath).map(
@@ -86,7 +80,6 @@ export default async (filePath, t, minDuration) => {
     .map((curr, index) => ({
       id: index,
       diff: curr,
-      timeCode: timeCodeList[index],
     }));
 
   const threshold = 50;
@@ -122,8 +115,8 @@ export default async (filePath, t, minDuration) => {
   // frameInfo[startFrameID] = Object.assign(frameInfo[startFrameID], {start:true});
   // frameInfo[endFrameID] = Object.assign(frameInfo[endFrameID], {end:true});
   // console.log(frameInfo);
-  const sceneTrimStart = trimStart + frameInfo[startFrameID].timeCode;
-  const sceneTrimEnd = trimStart + frameInfo[endFrameID].timeCode;
+  const sceneTrimStart = trimStart + startFrameID / fps;
+  const sceneTrimEnd = trimStart + endFrameID / fps;
 
   return {
     start: sceneTrimStart,
