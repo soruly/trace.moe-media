@@ -39,9 +39,11 @@ export default async (filePath, t, minDuration) => {
     [
       "-y",
       "-ss",
-      trimStart,
+      trimStart - 10,
       "-i",
       filePath,
+      "-ss",
+      "10",
       "-t",
       trimEnd - trimStart,
       "-an",

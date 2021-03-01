@@ -15,9 +15,11 @@ const generateVideoPreview = (filePath, start, end, size = "m", mute = false) =>
     [
       "-y",
       "-ss",
-      start,
+      start - 10,
       "-i",
       filePath,
+      "-ss",
+      "10",
       "-t",
       end - start,
       mute ? "-an" : "-y",
