@@ -56,11 +56,11 @@ npm install
 - Edit `.env` as follows
 
 ```
-SERVER_PORT=        # e.g. 3000
-REDIS_HOST=         # Usually 127.0.0.1
-TELEGRAM_TOKEN=     # e.g. 12345678:AAAAAAAAaA1AA1aa1Aaa1a_aAAaa-1aaAaa
-TELEGRAM_WEBHOOK=   # e.g. https://your.host.name/12345678:AAAAAAAAaA1AA1aa1Aaa1a_aAAaa-1aaAaa
-TRACE_MOE_KEY=      # Usually leave this empty
+VIDEO_PATH=         # e.g. /mnt/data/anilist/
+SERVER_PORT=        # e.g. 3001
+SERVER_ADDR=        # e.g. 127.0.0.1 or 0.0.0.0
+TRACE_MEDIA_SALT=   # define any random string, or leave blank to disable secure token
+TRACE_API_SECRET=   # same as TRACE_API_SECRET in trace.moe api's .env, or leave blank to disable auth
 ```
 
 ### Start server
