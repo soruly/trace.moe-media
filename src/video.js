@@ -6,7 +6,7 @@ import child_process from "child_process";
 
 import detectScene from "./lib/detect-scene.js";
 
-const { VIDEO_PATH, TRACE_MEDIA_SALT } = process.env;
+const { VIDEO_PATH = "/mnt/", TRACE_MEDIA_SALT } = process.env;
 
 const generateVideoPreview = (filePath, start, end, size = "m", mute = false) => {
   const tempPath = path.join(os.tmpdir(), `videoPreview${process.hrtime().join("")}.mp4`);

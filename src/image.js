@@ -3,7 +3,7 @@ import fs from "fs-extra";
 import crypto from "crypto";
 import child_process from "child_process";
 
-const { VIDEO_PATH, TRACE_MEDIA_SALT } = process.env;
+const { VIDEO_PATH = "/mnt/", TRACE_MEDIA_SALT } = process.env;
 
 const generateImagePreview = (filePath, t, size = "m") => {
   const ffmpeg = child_process.spawnSync("ffmpeg", [

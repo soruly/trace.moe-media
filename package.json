@@ -1,8 +1,8 @@
 {
   "name": "trace.moe-media",
   "version": "0.2.0",
-  "description": "",
-  "main": "",
+  "description": "Media server for trace.moe",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "pm2 start ecosystem.config.json",

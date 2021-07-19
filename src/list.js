@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs-extra";
 
-const { VIDEO_PATH } = process.env;
+const { VIDEO_PATH = "/mnt/" } = process.env;
 
 export default async (req, res) => {
   const videoDirPath = path.join(VIDEO_PATH, req.path);

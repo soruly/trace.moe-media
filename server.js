@@ -7,7 +7,13 @@ import image from "./src/image.js";
 import file from "./src/file.js";
 import checkSecret from "./src/check-secret.js";
 
-const { SERVER_PORT, SERVER_ADDR } = process.env;
+const {
+  SERVER_ADDR = "0.0.0.0",
+  SERVER_PORT = 3000,
+  VIDEO_PATH = "/mnt/",
+  TRACE_MEDIA_SALT,
+  TRACE_API_SECRET,
+} = process.env;
 
 const app = express();
 
@@ -51,6 +57,14 @@ app.use("/file/:anilistID/:filename", checkSecret, file);
 
 app.use("/list", checkSecret, list);
 
+if (TRACE_API_SECRET) {
+  console.log("Video upload/download secured by TRACE_API_SECRET");
+}
+if (TRACE_MEDIA_SALT) {
+  console.log("Video clip and image secured by TRACE_MEDIA_SALT");
+}
+
+console.log(`VIDEO_PATH: ${VIDEO_PATH}`);
 app.listen(SERVER_PORT, SERVER_ADDR, () =>
   console.log(`Media server listening on ${SERVER_ADDR}:${SERVER_PORT}`)
 );
