@@ -39,7 +39,7 @@ To be completed
 ### Getting Started
 
 ```bash
-docker run -it --init --rm -v /path/to/video/=/mnt/ -p 3000:3000 ghcr.io/soruly/trace.moe-media:latest
+docker run -it --rm -v /path/to/video/=/mnt/ -p 3000:3000 ghcr.io/soruly/trace.moe-media:latest
 ```
 
 #### List files
