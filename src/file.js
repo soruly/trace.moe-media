@@ -13,8 +13,15 @@ export default async (req, res) => {
     if (!fs.existsSync(videoFilePath)) {
       return res.status(404).send("Not found");
     }
-    res.set("Content-Type", "video/mp4");
-    res.send(fs.readFileSync(videoFilePath));
+    const readStream = fs.createReadStream(videoFilePath);
+    readStream.on("open", () => {
+      res.set("Content-Type", "video/mp4");
+      readStream.pipe(res);
+    });
+    readStream.on("error", (err) => {
+      console.log(JSON.stringify(err, null, 2));
+      res.sendStatus(500);
+    });
   } else if (req.method === "PUT") {
     console.log(`Uploading ${videoFilePath}`);
     fs.ensureDirSync(path.dirname(videoFilePath));
