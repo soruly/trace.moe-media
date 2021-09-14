@@ -1,6 +1,5 @@
 import path from "path";
 import fs from "fs-extra";
-import os from "os";
 import crypto from "crypto";
 import child_process from "child_process";
 
@@ -9,10 +8,13 @@ import detectScene from "./lib/detect-scene.js";
 const { VIDEO_PATH = "/mnt/", TRACE_MEDIA_SALT } = process.env;
 
 const generateVideoPreview = (filePath, start, end, size = "m", mute = false) => {
-  const tempPath = path.join(os.tmpdir(), `videoPreview${process.hrtime().join("")}.mp4`);
   const ffmpeg = child_process.spawnSync(
     "ffmpeg",
     [
+      "-hide_banner",
+      "-loglevel",
+      "error",
+      "-nostats",
       "-y",
       "-ss",
       start - 10,
@@ -23,6 +25,10 @@ const generateVideoPreview = (filePath, start, end, size = "m", mute = false) =>
       "-t",
       end - start,
       mute ? "-an" : "-y",
+      "-map",
+      "0:v:0",
+      "-map",
+      "0:a:0",
       "-vf",
       `scale=${{ l: 640, m: 320, s: 160 }[size]}:-2`,
       "-c:v",
@@ -43,14 +49,22 @@ const generateVideoPreview = (filePath, start, end, size = "m", mute = false) =>
       "128k",
       "-max_muxing_queue_size",
       "1024",
-      tempPath,
+      "-movflags",
+      "empty_moov",
+      "-map_metadata",
+      "-1",
+      "-map_chapters",
+      "-1",
+      "-f",
+      "mp4",
+      "-",
     ],
-    { encoding: "utf-8" }
+    { maxBuffer: 1024 * 1024 * 100 }
   );
-  // console.log(ffmpeg.stderr);
-  const videoBuffer = fs.readFileSync(tempPath);
-  fs.removeSync(tempPath);
-  return videoBuffer;
+  if (ffmpeg.stderr.length) {
+    console.log(ffmpeg.stderr.toString());
+  }
+  return ffmpeg.stdout;
 };
 
 export default async (req, res) => {
