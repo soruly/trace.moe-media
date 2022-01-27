@@ -29,7 +29,7 @@
     "canvas": "^2.9.0",
     "dotenv": "^14.3.2",
     "express": "^4.17.2",
-    "express-rate-limit": "^6.0.1",
+    "express-rate-limit": "^6.2.0",
     "fs-extra": "^10.0.0"
   },
   "devDependencies": {
