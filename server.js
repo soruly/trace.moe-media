@@ -2,10 +2,12 @@ import "dotenv/config.js";
 import express from "express";
 import rateLimit from "express-rate-limit";
 import list from "./src/list.js";
+import admin from "./src/admin.js";
 import video from "./src/video.js";
 import image from "./src/image.js";
 import file from "./src/file.js";
 import checkSecret from "./src/check-secret.js";
+import checkIP from "./src/check-ip.js";
 
 const {
   SERVER_ADDR = "0.0.0.0",
@@ -56,6 +58,10 @@ app.get("/image/:anilistID/:filename", image);
 app.use("/file/:anilistID/:filename", checkSecret, file);
 
 app.use("/list", checkSecret, list);
+
+app.use("/admin", checkIP, admin);
+
+app.use("/admin", checkIP, express.static(VIDEO_PATH));
 
 if (TRACE_API_SECRET) {
   console.log("Video upload/download secured by TRACE_API_SECRET");
