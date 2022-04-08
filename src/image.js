@@ -52,7 +52,11 @@ export default async (req, res) => {
     res.status(400).send("Bad Request. Invalid param: t");
     return;
   }
-  const videoFilePath = path.join(VIDEO_PATH, req.params.anilistID, req.params.filename);
+  const videoFilePath = path.join(
+    VIDEO_PATH,
+    req.params.anilistID,
+    req.params.filename.replace(/\.jpg$/, "")
+  );
   if (!videoFilePath.startsWith(VIDEO_PATH)) {
     res.status(403).send("Forbidden");
     return;
