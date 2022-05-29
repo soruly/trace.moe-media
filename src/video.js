@@ -73,15 +73,24 @@ export default async (req, res) => {
     req.query.token !==
       crypto
         .createHash("sha1")
-        .update([req.params.anilistID, req.params.filename, req.query.t, TRACE_MEDIA_SALT].join(""))
+        .update(
+          [
+            req.params.anilistID,
+            req.params.filename,
+            req.query.t,
+            req.query.now,
+            TRACE_MEDIA_SALT,
+          ].join("")
+        )
         .digest("base64")
         .replace(/[^0-9A-Za-z]/g, "")
   ) {
-    return res.status(400).send("Bad Request");
+    return res.status(403).send("Forbidden");
   }
+  if (((Date.now() / 1000) | 0) - Number(req.query.now) > 300) return res.status(410).send("Gone");
   const t = parseFloat(req.query.t);
   if (isNaN(t) || t < 0) {
-    return res.status(400).send("Bad Request");
+    return res.status(400).send("Bad Request. Invalid param: t");
   }
   const videoFilePath = path.join(VIDEO_PATH, req.params.anilistID, req.params.filename);
   if (!videoFilePath.startsWith(VIDEO_PATH)) {
@@ -92,7 +101,7 @@ export default async (req, res) => {
   }
   const size = req.query.size || "m";
   if (!["l", "m", "s"].includes(size)) {
-    return res.status(400).send("Bad Request");
+    return res.status(400).send("Bad Request. Invalid param: size");
   }
   const minDuration = Number(req.query.minDuration) || 0.25;
   try {
