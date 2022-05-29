@@ -1,4 +1,5 @@
 import "dotenv/config.js";
+import { performance } from "perf_hooks";
 import express from "express";
 import rateLimit from "express-rate-limit";
 import list from "./src/list.js";
@@ -22,6 +23,22 @@ const app = express();
 app.disable("x-powered-by");
 
 app.set("trust proxy", 1);
+
+app.use((req, res, next) => {
+  const startTime = performance.now();
+  console.log("=>", new Date().toISOString(), req.ip, req.path);
+  res.on("finish", () => {
+    console.log(
+      "<=",
+      new Date().toISOString(),
+      req.ip,
+      req.path,
+      res.statusCode,
+      `${(performance.now() - startTime).toFixed(0)}ms`
+    );
+  });
+  next();
+});
 
 app.use((req, res, next) => {
   res.set("Access-Control-Allow-Origin", "*");
