@@ -51,7 +51,7 @@ export default async (filePath, t, minDuration) => {
       `fps=${fps},scale=${width}:${height}`,
       `${tempPath}/%04d.jpg`,
     ],
-    { encoding: "utf-8" }
+    { encoding: "utf-8" },
   );
   // console.log(ffmpeg.stderr);
 
@@ -64,8 +64,8 @@ export default async (filePath, t, minDuration) => {
           const image = await Canvas.loadImage(path.join(tempPath, file));
           ctx.drawImage(image, 0, 0, width, height);
           resolve(ctx.getImageData(0, 0, width, height).data);
-        })
-    )
+        }),
+    ),
   );
   fs.removeSync(tempPath);
 

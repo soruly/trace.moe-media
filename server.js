@@ -34,7 +34,7 @@ app.use((req, res, next) => {
       req.ip,
       req.path,
       res.statusCode,
-      `${(performance.now() - startTime).toFixed(0)}ms`
+      `${(performance.now() - startTime).toFixed(0)}ms`,
     );
   });
   next();
@@ -54,7 +54,7 @@ app.use((req, res, next) => {
       "frame-ancestors 'none'",
       "form-action 'none'",
       "block-all-mixed-content",
-    ].join("; ")
+    ].join("; "),
   );
   next();
 });
@@ -63,7 +63,7 @@ app.use(
   rateLimit({
     max: 30, // 30 requests per IP address (per node.js process)
     windowMs: 60 * 1000, // per 1 minute
-  })
+  }),
 );
 
 app.get("/", (req, res) => res.send("ok"));
@@ -89,5 +89,5 @@ if (TRACE_MEDIA_SALT) {
 
 console.log(`VIDEO_PATH: ${VIDEO_PATH}`);
 app.listen(SERVER_PORT, SERVER_ADDR, () =>
-  console.log(`Media server listening on ${SERVER_ADDR}:${SERVER_PORT}`)
+  console.log(`Media server listening on ${SERVER_ADDR}:${SERVER_PORT}`),
 );

@@ -47,7 +47,7 @@ export default async (req, res) => {
             req.query.t,
             req.query.now,
             TRACE_MEDIA_SALT,
-          ].join("")
+          ].join(""),
         )
         .digest("base64")
         .replace(/[^0-9A-Za-z]/g, "")
@@ -62,7 +62,7 @@ export default async (req, res) => {
   const videoFilePath = path.join(
     VIDEO_PATH,
     req.params.anilistID,
-    req.params.filename.replace(/\.jpg$/, "")
+    req.params.filename.replace(/\.jpg$/, ""),
   );
   if (!videoFilePath.startsWith(VIDEO_PATH)) {
     return res.status(403).send("Forbidden");

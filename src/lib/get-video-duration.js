@@ -4,7 +4,7 @@ export default (filePath) => {
   const stdLog = child_process.spawnSync(
     "ffprobe",
     ["-i", filePath, "-show_entries", "format=duration", "-v", "quiet"],
-    { encoding: "utf-8" }
+    { encoding: "utf-8" },
   ).stdout;
   const result = /duration=((\d|\.)+)/.exec(stdLog);
   if (result === null) {

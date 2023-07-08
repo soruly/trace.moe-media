@@ -25,7 +25,7 @@ export default async (req, res, next) => {
       "frame-ancestors 'none'",
       "form-action 'none'",
       "block-all-mixed-content",
-    ].join("; ")
+    ].join("; "),
   );
   res.set("Content-Type", "text/html");
   res.send(
@@ -40,9 +40,9 @@ export default async (req, res, next) => {
             .map((e) =>
               e.endsWith(".mp4")
                 ? `<a href="${e}" target="_blank">${e}</a>`
-                : `<a href="${path.join(e, "/")}">${e}</a>`
+                : `<a href="${path.join(e, "/")}">${e}</a>`,
             ),
-        ].join("\n")
-      )
+        ].join("\n"),
+      ),
   );
 };

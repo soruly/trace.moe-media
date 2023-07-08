@@ -59,7 +59,7 @@ const generateVideoPreview = (filePath, start, end, size = "m", mute = false) =>
       "mp4",
       "-",
     ],
-    { maxBuffer: 1024 * 1024 * 100 }
+    { maxBuffer: 1024 * 1024 * 100 },
   );
   if (ffmpeg.stderr.length) {
     console.log(ffmpeg.stderr.toString());
@@ -80,7 +80,7 @@ export default async (req, res) => {
             req.query.t,
             req.query.now,
             TRACE_MEDIA_SALT,
-          ].join("")
+          ].join(""),
         )
         .digest("base64")
         .replace(/[^0-9A-Za-z]/g, "")
@@ -114,7 +114,7 @@ export default async (req, res) => {
       scene.start,
       scene.end,
       size,
-      "mute" in req.query
+      "mute" in req.query,
     );
     res.set("Content-Type", "video/mp4");
     res.set("x-video-start", scene.start);
