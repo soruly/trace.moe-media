@@ -28,7 +28,7 @@ const generateVideoPreview = (filePath, start, end, size = "m", mute = false) =>
       "-map",
       "0:v:0",
       "-map",
-      "0:a:0",
+      "0:a:0?",
       "-vf",
       `scale=${{ l: 640, m: 320, s: 160 }[size]}:-2`,
       "-c:v",
