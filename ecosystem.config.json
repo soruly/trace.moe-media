@@ -3,9 +3,9 @@
     {
       "name": "trace.moe-media",
       "script": "server.js",
-      "instances": 4,
+      "instances": 1,
       "autorestart": true,
-      "exec_mode": "cluster"
+      "exec_mode": "fork"
     }
   ]
 }
