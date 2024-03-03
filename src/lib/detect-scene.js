@@ -10,7 +10,7 @@ export default async (filePath, t, minDuration) => {
     return null;
   }
 
-  const videoDuration = getVideoDuration(filePath);
+  const videoDuration = await getVideoDuration(filePath);
   if (videoDuration === null || t > videoDuration) {
     return null;
   }
@@ -32,31 +32,33 @@ export default async (filePath, t, minDuration) => {
   const height = 18;
 
   const tempPath = path.join(os.tmpdir(), `videoPreview${process.hrtime().join("")}`);
-  fs.removeSync(tempPath);
-  fs.ensureDirSync(tempPath);
-  const ffmpeg = child_process.spawnSync(
-    "ffmpeg",
-    [
-      "-y",
-      "-ss",
-      trimStart - 10,
-      "-i",
-      filePath,
-      "-ss",
-      "10",
-      "-t",
-      trimEnd - trimStart,
-      "-an",
-      "-vf",
-      `fps=${fps},scale=${width}:${height}`,
-      `${tempPath}/%04d.jpg`,
-    ],
-    { encoding: "utf-8" },
-  );
-  // console.log(ffmpeg.stderr);
+  await fs.remove(tempPath);
+  await fs.ensureDir(tempPath);
+  await new Promise((resolve) => {
+    const ffmpeg = child_process.spawn(
+      "ffmpeg",
+      [
+        "-y",
+        "-ss",
+        trimStart - 10,
+        "-i",
+        filePath,
+        "-ss",
+        "10",
+        "-t",
+        trimEnd - trimStart,
+        "-an",
+        "-vf",
+        `fps=${fps},scale=${width}:${height}`,
+        `${tempPath}/%04d.jpg`,
+      ],
+      { encoding: "utf-8" },
+    );
+    ffmpeg.on("close", resolve);
+  });
 
   const imageDataList = await Promise.all(
-    fs.readdirSync(tempPath).map(
+    (await fs.readdir(tempPath)).map(
       (file) =>
         new Promise(async (resolve) => {
           const canvas = Canvas.createCanvas(width, height);
@@ -67,7 +69,7 @@ export default async (filePath, t, minDuration) => {
         }),
     ),
   );
-  fs.removeSync(tempPath);
+  await fs.remove(tempPath);
 
   const getImageDiff = (a, b) => {
     let diff = 0;

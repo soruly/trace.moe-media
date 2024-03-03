@@ -61,10 +61,11 @@ app.use((req, res, next) => {
 
 app.use(
   rateLimit({
-    max: 30, // 30 requests per IP address (per node.js process)
-    windowMs: 60 * 1000, // per 1 minute
+    max: 60, // limit each IP to 60 requests per 60 seconds
+    delayMs: 0, // disable delaying - full speed until the max limit is reached
   }),
 );
+app.locals.queue = 0;
 
 app.get("/", (req, res) => res.send("ok"));
 
@@ -74,7 +75,7 @@ app.get("/image/:anilistID/:filename", image);
 
 app.use("/file/:anilistID/:filename", checkSecret, file);
 
-app.use("/list", checkSecret, list);
+app.use("/list", list);
 
 app.use("/admin", checkIP, admin);
 
