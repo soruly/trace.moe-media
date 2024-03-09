@@ -1,14 +1,13 @@
 # trace.moe-media
 
 [![License](https://img.shields.io/github/license/soruly/trace.moe-media.svg?style=flat-square)](https://github.com/soruly/trace.moe-media/blob/master/LICENSE)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/soruly/trace.moe-media/docker-image.yml?style=flat-square)](https://github.com/soruly/trace.moe-media/actions)
-[![Docker](https://img.shields.io/docker/pulls/soruly/trace.moe-media?style=flat-square)](https://hub.docker.com/r/soruly/trace.moe-media)
-[![Docker Image Size](https://img.shields.io/docker/image-size/soruly/trace.moe-media/latest?style=flat-square)](https://hub.docker.com/r/soruly/trace.moe-media)
 [![Discord](https://img.shields.io/discord/437578425767559188.svg?style=flat-square)](https://discord.gg/K9jn6Kj)
 
 ### Media server for serving video preview for trace.moe
 
-This server uses a "video scene cutter" which automatically detect timestamp boundaries of a shot, and then trim the shot out without leaking / exposing other frames that belongs to previous / next scenes. Currently this is used by the website [trace.moe](https://trace.moe) and its Telegram Bot [@whatanimebot](http://t.me/whatanimebot).
+This server uses a "video scene cutter" which automatically detect timestamp boundaries of a shot, and then trim the shot out without leaking / exposing other frames that belongs to previous / next scenes.
+
+This media server is now integrated into [trace.moe-api](https://github.com/soruly/trace.moe-api). This is no longer needed for serving media preview.
 
 #### Background of this project
 
